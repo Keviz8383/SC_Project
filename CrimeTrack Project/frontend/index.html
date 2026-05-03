@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CrimeTrack | National Citizen Portal</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Accessibility & Top Bar -->
+    <div class="gov-top-bar">
+        <div class="gov-indicator">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem of India">
+            <span>Government of India &bull; Ministry of Home Affairs</span>
+        </div>
+        <div class="accessibility-tools">
+            <a href="#" class="a-tool">தமிழ்</a>
+            <span class="a-tool" onclick="setFontSize('small')">A-</span>
+            <span class="a-tool" onclick="setFontSize('normal')">A</span>
+            <span class="a-tool" onclick="setFontSize('large')">A+</span>
+            <a href="#skip" class="a-tool">Skip to Main Content</a>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <header class="main-header">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h2 style="font-weight: 800; letter-spacing: -1px; font-size: 1.8rem; line-height: 1;">CrimeTrack</h2>
+                <p
+                    style="font-size: 0.65rem; color: var(--teal-primary); letter-spacing: 2px; text-transform: uppercase; font-weight: 700;">
+                    Secure Citizen Portal</p>
+            </div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="status.html" class="nav-item">Track Status</a>
+            <a href="#services" class="nav-item">Services</a>
+            <a href="resources.html" class="nav-item">Resources</a>
+            <a href="contact.html" class="nav-item">Contact</a>
+        </nav>
+        <button class="btn btn-primary" onclick="toggleAuth('login')"
+            style="padding: 0.6rem 1.5rem; font-size: 0.85rem;">
+            <i class="fa-solid fa-user-lock"></i> Portal Login
+        </button>
+    </header>
+
+    <main id="skip">
+        <!-- Hero Section -->
+        <section class="hero animate-up">
+            <div class="hero-content">
+                <div class="live-ticker">
+                    <span class="ticker-label">Live Updates</span>
+                    <div class="ticker-content">
+                        <span>Incident CT-91A2 reported in Chennai - Status: Under Review</span>
+                        <span>&bull;</span>
+                        <span>New Cyber Intelligence Alert issued for Coimbatore Region</span>
+                        <span>&bull;</span>
+                        <span>Admin Panel: 124 complaints processed in the last 24 hours</span>
+                    </div>
+                </div>
+                <span class="sub-teal"
+                    style="color: var(--teal-primary); text-transform: uppercase; letter-spacing: 3px; font-weight: 800; font-size: 0.9rem; margin-bottom: 1rem; display: block;">Authorized
+                    Intelligence Repository</span>
+                <h1>Secure Access to <br> <span class="highlight">CrimeTrack</span></h1>
+                <p>Empowering citizens with real-time incident reporting and end-to-end transparent investigation
+                    tracking. Your safety, our digital priority.</p>
+                <div style="display: flex; gap: 1.5rem;">
+                    <button class="btn btn-primary" onclick="scrollIntoView('#services')">
+                        <i class="fa-solid fa-grid-view"></i> Explore Services
+                    </button>
+                    <button class="btn btn-outline" onclick="window.location.href='status.html'">
+                        <i class="fa-solid fa-satellite-dish"></i> Track Incident
+                    </button>
+                </div>
+
+                <div
+                    style="margin-top: 3rem; display: flex; gap: 2rem; border-top: 1px solid var(--border-color); padding-top: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <i class="fa-solid fa-lock" style="color: var(--teal-primary);"></i>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">256-bit AES Encryption</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.8rem;">
+                        <i class="fa-solid fa-bolt" style="color: var(--teal-primary);"></i>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Real-time Intel Updates</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auth Card -->
+            <div class="auth-card glass-card" id="auth-section" style="max-width: 450px; margin-left: auto; border: 1px solid var(--border-glow); box-shadow: 0 0 40px var(--teal-glow);">
+                <div class="tabs">
+                    <div class="tab active" id="tab-login" onclick="toggleAuth('login')">Sign In</div>
+                    <div class="tab" id="tab-register" onclick="toggleAuth('register')">Sign Up</div>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" onsubmit="handleAuth(event, 'login')">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="login-email" placeholder="name@domain.gov.in" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Authenticate Session
+                    </button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" style="display: none;" onsubmit="handleAuth(event, 'register')">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="reg-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="reg-email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Security Password</label>
+                        <input type="password" id="reg-password" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="reg-confirm" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label>User Role</label>
+                        <select id="reg-role">
+                            <option value="citizen">Citizen</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fa-solid fa-user-plus"></i> Create Secure Account
+                    </button>
+                </form>
+
+                <div id="auth-msg"
+                    style="margin-top: 1.5rem; text-align: center; font-size: 0.9rem; min-height: 1.2rem; font-weight: 500;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Strip -->
+        <div class="stats-strip">
+            <div class="stat-val">
+                <i class="fa-solid fa-file-shield" style="color: var(--teal-primary); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                <strong>1.2M+</strong>
+                <span>Verified Reports</span>
+            </div>
+            <div class="stat-val">
+                <i class="fa-solid fa-building-columns" style="color: var(--teal-primary); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                <strong>850+</strong>
+                <span>Police Stations</span>
+            </div>
+            <div class="stat-val">
+                <i class="fa-solid fa-chart-line" style="color: var(--teal-primary); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                <strong>98%</strong>
+                <span>Resolution Rate</span>
+            </div>
+            <div class="stat-val">
+                <i class="fa-solid fa-microchip" style="color: var(--teal-primary); font-size: 1.5rem; margin-bottom: 0.5rem;"></i>
+                <strong>2.4s</strong>
+                <span>API Latency</span>
+            </div>
+        </div>
+
+        <!-- Services Grid -->
+        <section class="services-section" id="services">
+            <div class="section-header">
+                <span class="sub-teal">National Services Portal</span>
+                <h2>Integrated Citizen Services</h2>
+                <p style="color: var(--text-muted);">Access the official suite of Tamil Nadu Police online utilities.
+                </p>
+            </div>
+
+            <div class="service-grid">
+                <a href="citizen.html" class="service-card">
+                    <i class="fa-solid fa-file-pen"></i>
+                    <div>
+                        <h3>Report Incident</h3>
+                        <p>File official complaints regarding theft, assault, harassment, or other public grievances.
+                        </p>
+                    </div>
+                </a>
+                <a href="status.html" class="service-card">
+                    <i class="fa-solid fa-magnifying-glass-location"></i>
+                    <div>
+                        <h3>Track Status</h3>
+                        <p>Monitor the live investigation progress and view intelligence updates on your reported cases.
+                        </p>
+                    </div>
+                </a>
+                <a href="lost-document.html" class="service-card">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <div>
+                        <h3>Lost Document Report</h3>
+                        <p>Generate and verify reports for missing certificates, ID cards, and official documents.</p>
+                    </div>
+                </a>
+                <a href="arrest-search.html" class="service-card">
+                    <i class="fa-solid fa-user-check"></i>
+                    <div>
+                        <h3>Arrest Details</h3>
+                        <p>Search verified federal records for details regarding individuals currently in state custody.
+                        </p>
+                    </div>
+                </a>
+                <a href="grievance.html" class="service-card">
+                    <i class="fa-solid fa-handshake-angle"></i>
+                    <div>
+                        <h3>File Grievance</h3>
+                        <p>Submit formal complaints against government services or administrative discrepancies.</p>
+                    </div>
+                </a>
+                <a href="status.html" class="service-card">
+                    <i class="fa-solid fa-building-shield"></i>
+                    <div>
+                        <h3>Verify Report</h3>
+                        <p>Authenticate the validity of any digital police report using the unique Case ID.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom: 1.5rem;">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h2 style="font-weight: 800; font-size: 1.5rem;">CrimeTrack</h2>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">This is the Official
+                    Government Services Portal of CrimeTrack, developed to enable a single window access to services
+                    provided by federal Indian entities.</p>
+                <div style="display: flex; gap: 1rem;">
+                    <i class="fa-brands fa-twitter a-tool" style="font-size: 1.2rem;"></i>
+                    <i class="fa-brands fa-facebook a-tool" style="font-size: 1.2rem;"></i>
+                    <i class="fa-brands fa-linkedin a-tool" style="font-size: 1.2rem;"></i>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="help.html">Help & Support</a></li>
+                    <li><a href="sitemap.html">Sitemap</a></li>
+                    <li><a href="terms.html">Terms of Use</a></li>
+                    <li><a href="policy.html">Website Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="tel:100">Emergency: 100</a></li>
+                    <li><a href="tel:1091">Women Helpline: 1091</a></li>
+                    <li><a href="tel:1930">Cyber Cell: 1930</a></li>
+                    <li><a href="feedback.html">Feedback Portal</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Portal Integrity</h4>
+                <div
+                    style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--border-color);">
+                    <p style="font-size: 0.8rem; color: var(--text-muted);">Last Updated: <br><strong
+                            style="color: var(--teal-primary);">12 Apr 2026</strong></p>
+                    <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">Visitor Summary:
+                        <br><strong style="color: var(--teal-primary);">12,459,203</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 CrimeTrack Portal. Designed & Developed by National Informatics Center.</p>
+            <p>Contents owned and maintained by Ministry of Home Affairs.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = utils.getUser();
+            if (user) {
+                utils.showMessage(`Welcome back, ${user.name}. Redirecting to your dashboard...`, 'success');
+                setTimeout(() => {
+                    window.location.href = user.role === 'admin' ? 'admin.html' : 'citizen.html';
+                }, 2000);
+            }
+        });
+
+        function toggleAuth(mode) {
+            const loginForm = document.getElementById('login-form');
+            const regForm = document.getElementById('register-form');
+            const tabLogin = document.getElementById('tab-login');
+            const tabReg = document.getElementById('tab-register');
+            const authSection = document.getElementById('auth-section');
+
+            // Scroll to auth section if needed
+            authSection.scrollIntoView({ behavior: 'smooth' });
+
+            if (mode === 'login') {
+                loginForm.style.display = 'block';
+                regForm.style.display = 'none';
+                tabLogin.classList.add('active');
+                tabReg.classList.remove('active');
+            } else {
+                loginForm.style.display = 'none';
+                regForm.style.display = 'block';
+                tabLogin.classList.remove('active');
+                tabReg.classList.add('active');
+            }
+        }
+
+        function setFontSize(size) {
+            if (size === 'small') document.documentElement.style.fontSize = '14px';
+            if (size === 'normal') document.documentElement.style.fontSize = '16px';
+            if (size === 'large') document.documentElement.style.fontSize = '18px';
+        }
+
+        function scrollIntoView(selector) {
+            document.querySelector(selector).scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

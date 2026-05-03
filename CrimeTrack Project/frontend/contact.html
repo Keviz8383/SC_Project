@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | CrimeTrack Portal</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="gov-top-bar">
+        <div class="gov-indicator">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem of India">
+            <span>Government of India &bull; Ministry of Home Affairs</span>
+        </div>
+        <div class="accessibility-tools">
+            <a href="index.html" class="a-tool">Home</a>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h2 style="font-weight: 800; font-size: 1.8rem; line-height: 1;">CrimeTrack</h2>
+                <p style="font-size: 0.65rem; color: var(--teal-primary); text-transform: uppercase;">Official Contact
+                    Matrix</p>
+            </div>
+        </a>
+    </header>
+
+    <main class="animate-up" style="max-width: 1000px; margin: 6rem auto; padding: 0 2rem;">
+        <h1 style="font-size: 3.5rem; margin-bottom: 2rem;">Get in <span class="highlight">Touch</span></h1>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;">
+            <div class="glass-card">
+                <h3 style="color: var(--teal-primary); margin-bottom: 2rem;"><i class="fa-solid fa-building-flag"></i>
+                    Headquarters</h3>
+                <p style="color: var(--text-main); margin-bottom: 0.5rem; font-weight: 700;">National Informatics Center
+                </p>
+                <p style="color: var(--text-muted); margin-bottom: 2rem;">A-Block, Main Road, <br>Chennai - 600001</p>
+
+                <h3 style="color: var(--teal-primary); margin-bottom: 1.5rem;"><i class="fa-solid fa-phone-volume"></i>
+                    Support Helplines</h3>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">General Inquiries: +91 9876543210</p>
+                <p style="color: var(--text-muted); margin-bottom: 1rem;">Tech Support: support@crimetrack.gov.in</p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="color: var(--teal-primary); margin-bottom: 2rem;"><i
+                        class="fa-solid fa-envelope-open-text"></i> Message the Portal</h3>
+                <form id="contact-form"
+                    onsubmit="event.preventDefault(); utils.showMessage('Message received. We will get back to you.', 'success'); this.reset();">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="Your full name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="official@domain.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea placeholder="How can we assist you today?" style="min-height: 120px;"
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Send Intelligence Query</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer style="margin-top: auto;">
+        <div class="footer-bottom">
+            <p>&copy; 2026 CrimeTrack Portal. Official Government Communication Channel.</p>
+            <a href="index.html" style="color: var(--teal-primary); text-decoration: none; font-weight: 700;">Back to
+                Home</a>
+        </div>
+    </footer>
+    <script src="assets/js/utils.js"></script>
+</body>
+
+</html>

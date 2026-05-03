@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Portal | CrimeTrack</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="gov-top-bar">
+        <div class="gov-indicator">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem of India">
+            <span>Government of India &bull; Excellence Cell</span>
+        </div>
+        <div class="accessibility-tools">
+            <a href="index.html" class="a-tool">Home</a>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h2 style="font-weight: 800; font-size: 1.8rem; line-height: 1;">CrimeTrack</h2>
+                <p style="font-size: 0.65rem; color: var(--teal-primary); text-transform: uppercase;">Citizen Feedback Loop</p>
+            </div>
+        </a>
+    </header>
+
+    <main class="animate-up" style="max-width: 800px; margin: 6rem auto; padding: 0 2rem;">
+        <h1 style="font-size: 3.5rem; margin-bottom: 2rem;">Your <span class="highlight">Voice</span> Matters</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 3rem;">Help us improve the National Citizen Portal by sharing your experience or suggestions for new features.</p>
+        
+        <div class="glass-card">
+            <form id="feedback-form" onsubmit="event.preventDefault(); utils.showMessage('Thank you for your valuable feedback!', 'success'); this.reset();">
+                <div class="form-group">
+                    <label>Overall Experience</label>
+                    <select required>
+                        <option value="">Choose a rating...</option>
+                        <option value="Excellent">Excellent - Highly Secure & Fast</option>
+                        <option value="Good">Good - Functional & Easy</option>
+                        <option value="Average">Average - Can be improved</option>
+                        <option value="Poor">Poor - Encountered issues</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>What can we improve?</label>
+                    <textarea placeholder="Tell us about your experience..." style="min-height: 150px;" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Would you recommend this portal to others?</label>
+                    <div style="display: flex; gap: 2rem;">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; text-transform: none; font-weight: 400; cursor: pointer;">
+                            <input type="radio" name="recommend" value="yes" style="width: auto;"> Yes, definitely
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; text-transform: none; font-weight: 400; cursor: pointer;">
+                            <input type="radio" name="recommend" value="no" style="width: auto;"> Not at this time
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Feedback</button>
+            </form>
+        </div>
+    </main>
+
+    <footer style="margin-top: auto;">
+        <div class="footer-bottom">
+            <p>&copy; 2026 CrimeTrack Portal. Feedback drives progress.</p>
+            <a href="index.html" style="color: var(--teal-primary); text-decoration: none; font-weight: 700;">Back to Home</a>
+        </div>
+    </footer>
+    <script src="assets/js/utils.js"></script>
+</body>
+</html>

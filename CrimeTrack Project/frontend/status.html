@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Portal | CrimeTrack</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .status-page-container {
+            width: 100%;
+            max-width: 600px;
+            padding: 2rem;
+        }
+
+        .portal-ui {
+            text-align: center;
+            padding: 4rem;
+        }
+
+        .portal-icon {
+            font-size: 4rem;
+            color: var(--teal-primary);
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 15px var(--teal-glow));
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="status-page-container animate-up">
+        <div class="glass-card portal-ui" style="border-color: var(--teal-primary);">
+            <i class="fa-solid fa-satellite-dish portal-icon"
+                style="animation: pulse 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;"></i>
+            <h1 style="font-size: 3rem; margin-bottom: 1rem; letter-spacing: -2px;">Tracking <span
+                    class="highlight">Portal</span></h1>
+            <p style="color: var(--text-muted); margin-bottom: 3.5rem; font-size: 1.1rem; font-weight: 500;">Authorize
+                access to official investigation trails by entering your unique Case Reference ID.</p>
+
+            <form onsubmit="handleTrack(event)" class="search-container">
+
+                <input type="text" id="track-id" placeholder="Ex: CT-A7X2-M9Q1"
+                    style="padding: 1.5rem 1.5rem 1.5rem 4.5rem; border-radius: 1.2rem; font-family: 'Outfit'; font-weight: 800; letter-spacing: 2px;"
+                    required>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2.5rem; padding: 1.2rem;">
+                    <i class="fa-solid fa-microchip"></i> Synchronize Federal Record
+                </button>
+            </form>
+
+            <div
+                style="margin-top: 4.5rem; display: flex; justify-content: center; gap: 3rem; border-top: 1px solid var(--border-color); padding-top: 3rem;">
+                <a href="index.html" class="a-tool"
+                    style="font-size: 0.9rem; display: flex; align-items: center; gap: 0.8rem; opacity: 1;">
+                    <i class="fa-solid fa-house"></i> Home
+                </a>
+                <a href="citizen.html" class="a-tool"
+                    style="font-size: 0.9rem; display: flex; align-items: center; gap: 0.8rem; opacity: 1;">
+                    <i class="fa-solid fa-user-shield"></i> Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/utils.js"></script>
+    <script>
+        async function handleTrack(event) {
+            event.preventDefault();
+            const id = document.getElementById('track-id').value.trim().toUpperCase();
+
+            utils.showLoader();
+
+            try {
+                // Check if ID exists
+                const res = await utils.apiFetch(`/complaints/${id}`);
+                if (res.complaint) {
+                    utils.showMessage('Access Granted. Redirecting to Dossier...', 'success');
+                    setTimeout(() => {
+                        window.location.href = `track.html?id=${id}`;
+                    }, 1000);
+                } else {
+                    utils.showMessage('Invalid Case ID. Record not found.', 'error');
+                }
+            } catch (err) {
+                utils.showMessage('System Error: Could not reach database.', 'error');
+            } finally {
+                utils.hideLoader();
+            }
+        }
+    </script>
+</body>
+
+</html>

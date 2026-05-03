@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Grievance Redressal | CrimeTrack</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="gov-top-bar">
+        <div class="gov-indicator">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem of India">
+            <span>Government of India &bull; Public Grievance Portal</span>
+        </div>
+        <div class="accessibility-tools">
+            <a href="index.html" class="a-tool">Home</a>
+            <span class="a-tool" onclick="setFontSize('small')">A-</span>
+            <span class="a-tool" onclick="setFontSize('normal')">A</span>
+            <span class="a-tool" onclick="setFontSize('large')">A+</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h2 style="font-weight: 800; font-size: 1.8rem; line-height: 1;">CrimeTrack</h2>
+                <p style="font-size: 0.65rem; color: var(--teal-primary); text-transform: uppercase;">Grievance Redressal Cell</p>
+            </div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="citizen.html" class="nav-item">Dashboard</a>
+            <a href="status.html" class="nav-item">Monitor Status</a>
+        </nav>
+    </header>
+
+    <main class="animate-up" style="max-width: 900px; margin: 6rem auto; padding: 0 2rem;">
+        <div class="glass-card" style="padding: 4rem;">
+            <h2 style="font-size: 2.5rem; color: var(--text-main); margin-bottom: 1.5rem; letter-spacing: -1px;">Public <span class="highlight">Grievance Portal</span></h2>
+            <p style="color: var(--text-muted); margin-bottom: 3.5rem; font-size: 1.1rem; line-height: 1.7;">The National Redressal Cell ensures your concerns regarding public services are addressed with professional integrity. Every submission is monitored by a central oversight commission.</p>
+
+            <form id="grievance-form" onsubmit="handleGrievance(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="form-group">
+                        <label>Target Department</label>
+                        <select id="grievance-dept" required>
+                            <option value="">Select jurisdiction...</option>
+                            <option value="Municipal Corporation">Municipal Corporation</option>
+                            <option value="Traffic Police">Traffic & Road Safety</option>
+                            <option value="Healthcare Services">State Healthcare Services</option>
+                            <option value="Electricity Board">Electricity/Utility Board</option>
+                            <option value="Passport/Gov Documents">Passport & Document Services</option>
+                            <option value="Police Conduct">Police Conduct & Ethics</option>
+                            <option value="Other">Other Administrative Concern</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Core Subject of Concern</label>
+                        <input type="text" id="grievance-subject" placeholder="Ex: Service Delay in Sector 7" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Intelligence brief on the issue</label>
+                    <textarea id="grievance-desc" placeholder="Explain the discrepancy in detail, including timeline of events and personnel interactions..." style="min-height: 150px;" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Desired Resolution / Outcome</label>
+                    <input type="text" id="grievance-outcome" placeholder="Describe the optimal redressal result">
+                </div>
+
+                <div style="background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.05); padding: 2rem; border-radius: 1.5rem; border: 1px dashed var(--border-glow); margin-bottom: 3rem;">
+                    <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;"><strong>Confidentiality Assurance:</strong> Your identity is protected under the Public Interest Disclosure Act and is only shared with authorized redressal officers.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.2rem;">
+                    <i class="fa-solid fa-bullhorn"></i> Lodge Formal Intelligence Grievance
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Success Modal: Premium Reveal -->
+    <div class="modal-overlay" id="success-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+        <div class="success-reveal-container" style="width: 100%; max-width: 550px;">
+            <div class="dossier-card" id="dossier-element">
+                <div class="glass-card" style="border-color: var(--teal-primary); position: relative; overflow: hidden; padding: 4rem 3rem; text-align: center;">
+                    <div class="digital-seal" id="seal-icon">
+                        <i class="fa-solid fa-gavel" style="font-size: 5rem; color: var(--teal-primary);"></i>
+                    </div>
+                    <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px;">Grievance <span class="highlight">Recorded</span></h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Official redressal ticket assigned to sector commission.</p>
+                    
+                    <div style="background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.05); padding: 2rem; border-radius: 1.5rem; border: 1px dashed var(--teal-primary); margin-bottom: 3.5rem;">
+                        <span style="display: block; font-size: 0.75rem; color: var(--teal-primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.8rem; font-weight: 800;">Ticket Serial Number</span>
+                        <div id="grievance-id" style="font-size: 3rem; font-weight: 800; color: var(--teal-primary); letter-spacing: 5px;">CT-GRV-XXXX</div>
+                    </div>
+
+                    <div style="display: flex; gap: 1.2rem;">
+                        <button class="btn btn-outline" onclick="window.location.href='index.html'" style="flex: 1;">Home</button>
+                        <button class="btn btn-primary" onclick="window.location.href='track.html?id=' + document.getElementById('grievance-id').innerText" style="flex: 1;">Track Ticket</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = utils.getUser();
+            if (!user) {
+                utils.showMessage('Authorization Required.', 'error');
+                setTimeout(() => window.location.href = 'index.html', 1500);
+            }
+        });
+
+        async function handleGrievance(event) {
+            event.preventDefault();
+            const user = utils.getUser();
+            const btn = event.submitter;
+            const originalHTML = btn.innerHTML;
+            
+            utils.showLoader();
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Synchronizing...';
+            btn.disabled = true;
+
+            const payload = {
+                user_id: user.id,
+                title: `Grievance: ${document.getElementById('grievance-dept').value}`,
+                category: 'Grievance',
+                description: `Dept: ${document.getElementById('grievance-dept').value}\nSubject: ${document.getElementById('grievance-subject').value}\nOutcome: ${document.getElementById('grievance-outcome').value}\n\nNotes: ${document.getElementById('grievance-desc').value}`
+            };
+
+            try {
+                const data = await utils.apiFetch('/complaints/', { method: 'POST', body: JSON.stringify(payload) });
+                document.getElementById('grievance-id').innerText = data.complaint_id;
+                
+                const modal = document.getElementById('success-modal');
+                const dossier = document.getElementById('dossier-element');
+                modal.style.display = 'flex';
+                dossier.classList.add('reveal-open');
+                
+                utils.showMessage('Public grievance synchronized successfully.', 'success');
+                event.target.reset();
+            } catch (err) {
+                utils.showMessage('Submission Error: ' + err.message, 'error');
+            } finally {
+                utils.hideLoader();
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        }
+
+        function setFontSize(size) {
+            if (size === 'small') document.documentElement.style.fontSize = '14px';
+            if (size === 'normal') document.documentElement.style.fontSize = '16px';
+            if (size === 'large') document.documentElement.style.fontSize = '18px';
+        }
+    </script>
+</body>
+</html>

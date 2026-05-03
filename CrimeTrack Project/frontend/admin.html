@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intelligence Hub | CrimeTrack Admin</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+            padding: 2rem 4rem;
+        }
+
+        .chart-container {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 1.2rem;
+            margin-top: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .chart-container:hover {
+            border-color: var(--teal-primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 0.8rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 1.2rem 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td:first-child { border-left: 1px solid var(--border-color); border-radius: 1rem 0 0 1rem; }
+        td:last-child { border-right: 1px solid var(--border-color); border-radius: 0 1rem 1rem 0; }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(12px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        @media (max-width: 1200px) {
+            .admin-layout { grid-template-columns: 1fr; padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="gov-top-bar">
+        <div class="gov-indicator">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem of India">
+            <span>Government of India &bull; Admin Intelligence Command</span>
+        </div>
+        <div class="accessibility-tools">
+            <a href="index.html" class="a-tool">Home</a>
+            <span class="a-tool" onclick="setFontSize('small')">A-</span>
+            <span class="a-tool" onclick="setFontSize('normal')">A</span>
+            <span class="a-tool" onclick="setFontSize('large')">A+</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h2 style="font-weight: 800; font-size: 1.8rem; line-height: 1;">CrimeTrack Admin</h2>
+                <p style="font-size: 0.65rem; color: var(--teal-primary); text-transform: uppercase;">Central Intelligence Hub</p>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 2rem;">
+            <div style="text-align: right; border-right: 1px solid var(--border-color); padding-right: 1.5rem;">
+                <span id="admin-name" style="font-weight: 700; display: block; font-size: 1rem;">Admin Agent</span>
+                <span style="font-size: 0.75rem; color: var(--teal-primary); opacity: 0.8;">Level 5 Clearance</span>
+            </div>
+            <button class="btn btn-outline" style="padding: 0.5rem 1.2rem; font-size: 0.8rem;" onclick="utils.logout()">
+                <i class="fa-solid fa-power-off"></i> Terminate Session
+            </button>
+        </div>
+    </header>
+
+    <main class="admin-layout animate-up">
+        <!-- Main: Registry -->
+        <section>
+            <div class="glass-card" style="padding: 3rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
+                    <h3 style="color: var(--teal-primary); display: flex; align-items: center; gap: 1rem; font-size: 1.5rem;">
+                        <i class="fa-solid fa-folder-tree"></i> Global Complaint Registry
+                    </h3>
+                    <div style="display: flex; gap: 1.5rem;">
+                        <div class="search-container" style="width: 300px;">
+                            <i class="fa-solid fa-fingerprint"></i>
+                            <input type="text" id="admin-search" placeholder="Filter intelligence records..." onkeyup="filterAdminData()" style="padding: 1rem 1rem 1rem 3.5rem; font-size: 0.85rem; border-radius: 1rem;">
+                        </div>
+                        <select id="admin-filter-status" onchange="filterAdminData()" style="padding: 0.8rem; width: 200px; font-size: 0.85rem; border-radius: 1rem;">
+                            <option value="">All Threat Levels</option>
+                            <option value="Submitted">Submitted</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Action Taken">Action Taken</option>
+                            <option value="Closed">Closed</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table id="complaints-table">
+                        <thead>
+                            <tr>
+                                <th>Reference ID</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Detection Date</th>
+                                <th style="text-align: right;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Injected rows -->
+                        </tbody>
+                    </table>
+                    <div id="no-data-msg" style="text-align: center; padding: 6rem 0; display: none;">
+                        <i class="fa-solid fa-inbox" style="font-size: 3rem; color: var(--border-color); margin-bottom: 2rem; display: block;"></i>
+                        <p style="color: var(--text-muted); font-size: 1rem;">No intelligence records identified in this sector.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sidebar: Analytics -->
+        <aside>
+            <div class="glass-card" style="padding: 2.5rem;">
+                <h3 style="color: var(--teal-primary); margin-bottom: 2.5rem; font-size: 1.3rem;"><i class="fa-solid fa-chart-pie"></i> Real-time Analytics</h3>
+                
+                <div class="chart-container" style="background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.02);">
+                    <canvas id="statusChart"></canvas>
+                </div>
+                
+                <div class="chart-container" style="margin-top: 2.5rem; background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.02);">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+
+                <div style="margin-top: 4rem; padding: 2rem; background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.05); border: 1px solid var(--border-glow); border-radius: 1.5rem;">
+                    <h5 style="color: var(--teal-primary); margin-bottom: 1.5rem; text-transform: uppercase; font-size: 0.75rem; font-weight: 800; letter-spacing: 2px;">System Integrity</h5>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 1rem;">
+                        <span style="color: var(--text-muted);">Uptime:</span>
+                        <span style="color: var(--teal-primary); font-weight: 800;">100.0%</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                        <span style="color: var(--text-muted);">SLA Status:</span>
+                        <span style="color: #34d399; font-weight: 800;">ACTIVE</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Status Update Modal -->
+    <div id="statusModal" class="modal-overlay">
+        <div class="glass-card" style="width: 500px; border-color: var(--teal-primary);">
+            <h3 style="color: var(--teal-primary); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem;">
+                <i class="fa-solid fa-pen-to-square"></i> Case Management
+            </h3>
+            <p id="modal-cid" style="font-weight: 800; color: var(--teal-primary); font-family: 'Outfit'; margin-bottom: 2rem;"></p>
+            
+            <div class="form-group">
+                <label>Update Investigation Status</label>
+                <select id="modal-status">
+                    <option value="Submitted">Submitted</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Action Taken">Action Taken</option>
+                    <option value="Closed">Closed</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Investigative Remarks</label>
+                <textarea id="modal-remarks" placeholder="Enter formal findings..." style="min-height: 120px;"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn btn-outline" style="flex: 1;" onclick="closeModal()">Abort</button>
+                <button class="btn btn-primary" style="flex: 2;" onclick="submitStatusUpdate()">Authorize Update</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/utils.js"></script>
+    <script>
+        let currentComplaintId = null;
+        let allComplaints = [];
+        let statusChartInstance = null;
+        let categoryChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = utils.getUser();
+            if (!user || user.role !== 'admin') window.location.href = 'index.html';
+            document.getElementById('admin-name').innerText = user.name;
+            loadAllComplaints();
+        });
+
+        async function loadAllComplaints() {
+            try {
+                allComplaints = await utils.apiFetch('/admin/complaints');
+                renderAdminTable(allComplaints);
+                updateCharts(allComplaints);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderAdminTable(data) {
+            const tbody = document.getElementById('table-body');
+            const noData = document.getElementById('no-data-msg');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                noData.style.display = 'block';
+                return;
+            }
+            noData.style.display = 'none';
+
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'animate-up';
+                tr.style.animationDelay = `${index * 0.05}s`;
+                const statusClass = item.status.toLowerCase().replace(/\s+/g, '');
+                
+                tr.innerHTML = `
+                    <td><strong style="color: var(--teal-primary); font-family: 'Outfit'; letter-spacing: 1px;">#${item.id}</strong></td>
+                    <td style="font-weight: 700; color: var(--text-main);">${item.category}</td>
+                    <td><span class="status-badge status-${statusClass}">${item.status}</span></td>
+                    <td style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">${new Date(item.created_at).toLocaleDateString(undefined, {dateStyle: 'medium'})}</td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-primary" style="padding: 0.6rem 1.2rem; font-size: 0.75rem; border-radius: 0.8rem;" onclick="openStatusModal('${item.id}', '${item.status}')">
+                            <i class="fa-solid fa-sliders"></i> Process
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function openStatusModal(id, status) {
+            currentComplaintId = id;
+            document.getElementById('modal-cid').innerText = 'IDENTIFIER: ' + id;
+            document.getElementById('modal-status').value = status;
+            document.getElementById('modal-remarks').value = '';
+            document.getElementById('statusModal').style.display = 'flex';
+        }
+
+        function closeModal() { document.getElementById('statusModal').style.display = 'none'; }
+
+        async function submitStatusUpdate() {
+            const user = utils.getUser();
+            const status = document.getElementById('modal-status').value;
+            const remarks = document.getElementById('modal-remarks').value;
+
+            utils.showLoader();
+            try {
+                await utils.apiFetch('/admin/update-status', {
+                    method: 'POST',
+                    body: JSON.stringify({ complaint_id: currentComplaintId, status, remarks, admin_id: user.id })
+                });
+                closeModal();
+                utils.showMessage('Case identifier status authorized and updated.', 'success');
+                loadAllComplaints();
+            } catch (err) {
+                utils.showMessage('Authorization Failure: ' + err.message, 'error');
+            } finally {
+                utils.hideLoader();
+            }
+        }
+
+        function updateCharts(data) {
+            const statusCounts = {};
+            const categoryCounts = {};
+            data.forEach(item => {
+                statusCounts[item.status] = (statusCounts[item.status] || 0) + 1;
+                categoryCounts[item.category] = (categoryCounts[item.category] || 0) + 1;
+            });
+
+            if (statusChartInstance) statusChartInstance.destroy();
+            if (categoryChartInstance) categoryChartInstance.destroy();
+
+            const primaryTeal = 'hsl(171, 77%, 55%)';
+            const secondaryBlue = 'hsl(200, 100%, 50%)';
+            const accentAmber = 'hsl(45, 100%, 50%)';
+
+            statusChartInstance = new Chart(document.getElementById('statusChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(statusCounts),
+                    datasets: [{
+                        data: Object.values(statusCounts),
+                        backgroundColor: [secondaryBlue, accentAmber, '#10b981', '#64748b'],
+                        borderWidth: 0,
+                        hoverOffset: 15
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    cutout: '80%',
+                    plugins: { 
+                        title: { display: true, text: 'OPERATIONAL DEPLOYMENT', color: primaryTeal, font: { family: 'Outfit', weight: 'bold', size: 14 } },
+                        legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 10, weight: '600' }, padding: 20 } }
+                    } 
+                }
+            });
+
+            categoryChartInstance = new Chart(document.getElementById('categoryChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(categoryCounts),
+                    datasets: [{
+                        label: 'Intelligence Density',
+                        data: Object.values(categoryCounts),
+                        backgroundColor: 'hsla(171, 77%, 55%, 0.3)',
+                        borderColor: primaryTeal,
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    scales: { 
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#94a3b8' } }, 
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } } 
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'INTEL PERSPECTIVE BY CATEGORY', color: primaryTeal, font: { family: 'Outfit', weight: 'bold', size: 14 } }
+                    }
+                }
+            });
+        }
+
+        function filterAdminData() {
+            const term = document.getElementById('admin-search').value.toLowerCase();
+            const status = document.getElementById('admin-filter-status').value;
+            const filtered = allComplaints.filter(c => {
+                const matchesSearch = c.id.toLowerCase().includes(term) || c.category.toLowerCase().includes(term);
+                const matchesStatus = status === "" || c.status === status;
+                return matchesSearch && matchesStatus;
+            });
+            renderAdminTable(filtered);
+        }
+
+        function setFontSize(size) {
+            if (size === 'small') document.documentElement.style.fontSize = '14px';
+            if (size === 'normal') document.documentElement.style.fontSize = '16px';
+            if (size === 'large') document.documentElement.style.fontSize = '18px';
+        }
+    </script>
+</body>
+</html>

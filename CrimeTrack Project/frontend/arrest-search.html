@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrest Records Search | CrimeTrack</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .search-results {
+            margin-top: 3rem;
+            display: grid;
+            gap: 1.5rem;
+        }
+        .arrest-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 2rem;
+            border-radius: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+        .arrest-card:hover {
+            border-color: var(--teal-primary);
+            background: rgba(45, 212, 191, 0.03);
+            transform: translateX(5px);
+        }
+        .search-box-premium {
+            background: var(--bg-card);
+            padding: 3rem;
+            border-radius: 2rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="gov-top-bar">
+        <div class="gov-indicator">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem of India">
+            <span>Government of India &bull; Judicial Data Portal</span>
+        </div>
+        <div class="accessibility-tools">
+            <a href="index.html" class="a-tool">Home</a>
+            <span class="a-tool" onclick="setFontSize('small')">A-</span>
+            <span class="a-tool" onclick="setFontSize('normal')">A</span>
+            <span class="a-tool" onclick="setFontSize('large')">A+</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h2 style="font-weight: 800; font-size: 1.8rem; line-height: 1;">CrimeTrack</h2>
+                <p style="font-size: 0.65rem; color: var(--teal-primary); text-transform: uppercase;">Arrest Records Database</p>
+            </div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="citizen.html" class="nav-item">Dashboard</a>
+            <a href="status.html" class="nav-item">Verify LDR</a>
+        </nav>
+    </header>
+
+    <main class="animate-up" style="max-width: 1000px; margin: 6rem auto; padding: 0 2rem;">
+        <div class="glass-card" style="padding: 4rem; border-radius: 2.5rem;">
+            <h2 style="font-size: 3rem; color: var(--text-main); margin-bottom: 1.5rem; letter-spacing: -2px;">Arrest <span class="highlight">Intelligence</span></h2>
+            <p style="color: var(--text-muted); margin-bottom: 3.5rem; font-size: 1.1rem; max-width: 800px;">Authorized access to verified arrest dossiers across state departments. Perform an intelligence scan to retrieve official records.</p>
+
+            <form onsubmit="searchArrests(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="form-group">
+                        <label>Personnel Identifier / Name</label>
+                        <input type="text" id="person-name" placeholder="Search by name segment..." style="padding: 1.2rem 1.5rem; border-radius: 1rem;">
+                    </div>
+                    <div class="form-group">
+                        <label>Sector / District Assignment</label>
+                        <select id="district" style="padding: 1.2rem; border-radius: 1rem;">
+                            <option value="">All Regions</option>
+                            <option value="Chennai">Chennai Central</option>
+                            <option value="Madurai">Madurai North</option>
+                            <option value="Coimbatore">Coimbatore West</option>
+                            <option value="Trichy">Trichy East</option>
+                            <option value="Salem">Salem City</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem; padding: 1.2rem;">
+                    <i class="fa-solid fa-satellite"></i> Initiate Scanning Protocol
+                </button>
+            </form>
+        </div>
+
+        <div id="results-count" style="margin: 4rem 0 2rem; color: var(--text-muted); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; display: none;">
+            Live Intel: <span id="count-val" style="color: var(--teal-primary);">0</span> dossiers identified
+        </div>
+
+        <div id="results-loader" style="display: none; text-align: center; padding: 6rem 0;">
+            <div class="loader-spinner" style="margin: 0 auto 2.5rem; width: 60px; height: 60px;"></div>
+            <p style="color: var(--teal-primary); font-weight: 700; letter-spacing: 1px;">DECRYPTING JUDICIAL REPOSITORY...</p>
+        </div>
+
+        <div id="search-results" class="search-results">
+            <!-- Initial State -->
+            <div style="text-align: center; padding: 6rem 0; background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.02); border-radius: 2rem; border: 1px dashed var(--border-color);">
+                <i class="fa-solid fa-fingerprint" style="font-size: 4rem; color: var(--border-color); opacity: 0.4; margin-bottom: 2rem; display: block;"></i>
+                <p style="color: var(--text-muted); font-size: 1.1rem; font-weight: 500;">Please provide search parameters to authenticate access.</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/utils.js"></script>
+    <script>
+        async function searchArrests(event) {
+            event.preventDefault();
+            const name = document.getElementById('person-name').value;
+            const district = document.getElementById('district').value;
+            const loader = document.getElementById('results-loader');
+            const results = document.getElementById('search-results');
+            const count = document.getElementById('results-count');
+
+            results.innerHTML = '';
+            loader.style.display = 'block';
+            count.style.display = 'none';
+
+            try {
+                const data = await utils.apiFetch(`/services/arrests?name=${encodeURIComponent(name)}&district=${encodeURIComponent(district)}`);
+
+                loader.style.display = 'none';
+                count.style.display = 'block';
+                document.getElementById('count-val').innerText = data.length;
+
+                if (data.length === 0) {
+                    utils.showMessage('No intelligence dossiers identified.', 'error');
+                    results.innerHTML = `<div style="text-align: center; padding: 6rem 0; color: var(--text-muted); font-weight: 500;">No records synchronized for these parameters.</div>`;
+                    return;
+                }
+
+                utils.showMessage(`${data.length} intelligence files retrieved.`, 'success');
+                data.forEach((p, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'arrest-card animate-up';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    card.style.padding = '2.5rem';
+                    card.style.marginBottom = '1.5rem';
+                    
+                    const statusColor = p.status === 'In Custody' ? '#fbbf24' : '#10b981';
+                    
+                    card.innerHTML = `
+                        <div style="flex: 1;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                <span style="font-family: 'Outfit'; font-weight: 800; color: var(--teal-primary); font-size: 0.75rem; background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.1); padding: 0.4rem 0.8rem; border-radius: 0.6rem; letter-spacing: 1px; border: 1px solid var(--border-glow);">REG:${p.id}</span>
+                                <h3 style="font-size: 1.8rem; letter-spacing: -1px;">${p.name}</h3>
+                            </div>
+                            <div style="display: flex; gap: 2.5rem; color: var(--text-muted); font-size: 0.95rem; font-weight: 500;">
+                                <span><i class="fa-solid fa-clock" style="color: var(--teal-primary); margin-right: 0.5rem;"></i> ${p.date}</span>
+                                <span><i class="fa-solid fa-map-location-dot" style="color: var(--teal-primary); margin-right: 0.5rem;"></i> ${p.district}</span>
+                                <span><i class="fa-solid fa-shield-halved" style="color: var(--teal-primary); margin-right: 0.5rem;"></i> ${p.offense}</span>
+                            </div>
+                        </div>
+                        <div style="text-align: right; min-width: 180px;">
+                            <span class="status-badge" style="background: ${statusColor}1A; color: ${statusColor}; border: 1px solid ${statusColor}4D; padding: 0.6rem 1.2rem; font-size: 0.8rem;">${p.status}</span>
+                            <button class="btn btn-outline" style="margin-top: 1.5rem; padding: 0.6rem 1.2rem; font-size: 0.8rem; width: 100%;" onclick="utils.showMessage('Classified Dossier: Access requires Level 3 Judicial Clearance.', 'error')">
+                                <i class="fa-solid fa-eye"></i> Access Files
+                            </button>
+                        </div>
+                    `;
+                    results.appendChild(card);
+                });
+            } catch (err) {
+                loader.style.display = 'none';
+                utils.showMessage('Database connection error.', 'error');
+                results.innerHTML = `<div style="text-align: center; padding: 6rem 0; color: #f87171; font-weight: 600;">System Error: Encrypted connection severed.</div>`;
+            }
+        }
+
+        function setFontSize(size) {
+            if (size === 'small') document.documentElement.style.fontSize = '14px';
+            if (size === 'normal') document.documentElement.style.fontSize = '16px';
+            if (size === 'large') document.documentElement.style.fontSize = '18px';
+        }
+    </script>
+</body>
+</html>

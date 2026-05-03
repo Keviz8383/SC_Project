@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Document Report | CrimeTrack</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="gov-top-bar">
+        <div class="gov-indicator">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Emblem_of_India.svg" alt="Emblem of India">
+            <span>Government of India &bull; Lost Document Registry</span>
+        </div>
+        <div class="accessibility-tools">
+            <a href="index.html" class="a-tool">Home</a>
+            <span class="a-tool" onclick="setFontSize('small')">A-</span>
+            <span class="a-tool" onclick="setFontSize('normal')">A</span>
+            <span class="a-tool" onclick="setFontSize('large')">A+</span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <a href="index.html" class="logo">
+            <i class="fa-solid fa-shield-halved"></i>
+            <div>
+                <h2 style="font-weight: 800; font-size: 1.8rem; line-height: 1;">CrimeTrack</h2>
+                <p style="font-size: 0.65rem; color: var(--teal-primary); text-transform: uppercase;">Lost Document Services</p>
+            </div>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-item">Home</a>
+            <a href="citizen.html" class="nav-item">Dashboard</a>
+            <a href="status.html" class="nav-item">Verify Report</a>
+        </nav>
+    </header>
+
+    <main class="animate-up" style="max-width: 900px; margin: 6rem auto; padding: 0 2rem;">
+        <div class="glass-card" style="padding: 4rem;">
+            <h2 style="font-size: 2.5rem; color: var(--text-main); margin-bottom: 1.5rem; letter-spacing: -1px;">Report <span class="highlight">Lost Document</span></h2>
+            <p style="color: var(--text-muted); margin-bottom: 3.5rem; font-size: 1.1rem; line-height: 1.7;">This service facilitates official reporting for mislaid identification, certificates, or licenses. The generated report serves as a legal prerequisite for replacement or insurance claims.</p>
+
+            <form id="lost-doc-form" onsubmit="handleLostDoc(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="form-group">
+                        <label>Document Classification</label>
+                        <select id="doc-type" required>
+                            <option value="">Select category...</option>
+                            <option value="Aadhar Card">Aadhar Card</option>
+                            <option value="PAN Card">PAN Card</option>
+                            <option value="Passport">Passport</option>
+                            <option value="Driving License">Driving License</option>
+                            <option value="Marksheet/Certificate">Marksheet/Certificate</option>
+                            <option value="Voter ID">Voter ID Card</option>
+                            <option value="Other">Other Official Document</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Identity Reference Number</label>
+                        <input type="text" id="doc-number" placeholder="Enter ID string" required>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    <div class="form-group">
+                        <label>Temporal Detail of Loss</label>
+                        <input type="date" id="doc-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Geospatial Point of Loss</label>
+                        <input type="text" id="doc-place" placeholder="Primary Location" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Circumstantial brief</label>
+                    <textarea id="doc-desc" placeholder="Provide detailed intelligence on how the asset was mislaid..." style="min-height: 120px;" required></textarea>
+                </div>
+
+                <div style="background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.05); padding: 2rem; border-radius: 1.5rem; border: 1px dashed var(--teal-glow); margin-bottom: 3rem;">
+                    <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;"><strong>Federal Declaration:</strong> I verify that the provided intelligence is accurate. Intentional filing of inaccurate reports is a violation of the IT Act and IPC.</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1.2rem;">
+                    <i class="fa-solid fa-file-shield"></i> Authorize & Synchronize LDR
+                </button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Success Modal: Premium Reveal -->
+    <div class="modal-overlay" id="success-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(20px); z-index: 2000; align-items: center; justify-content: center; padding: 1.5rem;">
+        <div class="success-reveal-container" style="width: 100%; max-width: 550px;">
+            <div class="dossier-card" id="dossier-element">
+                <div class="glass-card" style="border-color: var(--teal-primary); position: relative; overflow: hidden; padding: 4rem 3rem; text-align: center;">
+                    <div class="digital-seal" id="seal-icon">
+                        <i class="fa-solid fa-file-contract" style="font-size: 5rem; color: var(--teal-primary);"></i>
+                    </div>
+                    <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; letter-spacing: -1px;">Report <span class="highlight">Filed</span></h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2.5rem;">Lost Document Report (LDR) successfully synchronized.</p>
+                    
+                    <div style="background: hsla(var(--teal-h), var(--teal-s), var(--teal-l), 0.05); padding: 2rem; border-radius: 1.5rem; border: 1px dashed var(--teal-primary); margin-bottom: 3.5rem;">
+                        <span style="display: block; font-size: 0.75rem; color: var(--teal-primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.8rem; font-weight: 800;">LDR Serial Number</span>
+                        <div id="ldr-id" style="font-size: 3rem; font-weight: 800; color: var(--teal-primary); letter-spacing: 5px;">CT-LDR-XXXX</div>
+                    </div>
+
+                    <div style="display: flex; gap: 1.2rem;">
+                        <button class="btn btn-outline" onclick="window.location.href='index.html'" style="flex: 1;">Home</button>
+                        <button class="btn btn-primary" onclick="window.location.href='track.html?id=' + document.getElementById('ldr-id').innerText" style="flex: 1;">View Dossier</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/utils.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = utils.getUser();
+            if (!user) {
+                utils.showMessage('Authorization Required.', 'error');
+                setTimeout(() => window.location.href = 'index.html', 1500);
+            }
+        });
+
+        async function handleLostDoc(event) {
+            event.preventDefault();
+            const user = utils.getUser();
+            const btn = event.submitter;
+            const originalHTML = btn.innerHTML;
+            
+            utils.showLoader();
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            const payload = {
+                user_id: user.id,
+                title: `LDR: ${document.getElementById('doc-type').value}`,
+                category: 'Lost Document',
+                description: `ID: ${document.getElementById('doc-number').value}\nDate: ${document.getElementById('doc-date').value}\nLoc: ${document.getElementById('doc-place').value}\n\nNotes: ${document.getElementById('doc-desc').value}`,
+                location_address: document.getElementById('doc-place').value
+            };
+
+            try {
+                const data = await utils.apiFetch('/complaints/', { method: 'POST', body: JSON.stringify(payload) });
+                document.getElementById('ldr-id').innerText = data.complaint_id;
+                
+                const modal = document.getElementById('success-modal');
+                const dossier = document.getElementById('dossier-element');
+                modal.style.display = 'flex';
+                dossier.classList.add('reveal-open');
+                
+                utils.showMessage('Lost document report authorized.', 'success');
+                event.target.reset();
+            } catch (err) {
+                utils.showMessage('Submission Failed: ' + err.message, 'error');
+            } finally {
+                utils.hideLoader();
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        }
+
+        function setFontSize(size) {
+            if (size === 'small') document.documentElement.style.fontSize = '14px';
+            if (size === 'normal') document.documentElement.style.fontSize = '16px';
+            if (size === 'large') document.documentElement.style.fontSize = '18px';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+flask
+flask-cors
+flask-restful
+python-dotenv
+supabase
+gotrue
+postgrest
+storage3
+realtime
+pyjwt
+bcrypt
